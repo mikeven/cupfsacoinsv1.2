@@ -30,7 +30,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 		<!-- Web Fonts  -->
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
 
 		<!-- Vendor CSS -->
 		<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.css" />
@@ -41,6 +41,7 @@
 		<!-- Specific Page Vendor CSS -->
 		<link rel="stylesheet" href="assets/vendor/select2/select2.css" />
 		<link rel="stylesheet" href="assets/vendor/jquery-datatables-bs3/assets/css/datatables.css" />
+		<link rel="stylesheet" href="assets/vendor/pnotify/pnotify.custom.css" />
 
 		<!-- Theme CSS -->
 		<link rel="stylesheet" href="assets/stylesheets/theme.css" />
@@ -95,32 +96,44 @@
 								</h2>
 							</header>
 							<div class="panel-body">
-								<table class="table table-bordered table-striped mb-none" id="datatable-editable">
+								<table class="table table-bordered table-striped mb-none listado_canjes" id="datatable-default">
 									<thead>
 										<tr>
-											<th>Fecha</th>
+											<th>Fecha Canje</th>
 											<th>Usuario</th>
 											<th>Valor de canje</th>
 											<th>Producto</th>
+											<th>Fecha Entrega</th>
+											<th>Acciones</th>
 										</tr>
 									</thead>
 									<tbody>
 										<?php foreach ( $canjes as $c ) { ?>
 										<tr class="gradeX">
 											<td><?php echo $c["fregistro"]; ?></td>
-											<td>
-												<?php 
-													echo $c["nombre"]." ".$c["apellido"];
-												?>
-											</td>
+											<td><?php echo $c["nombre"]." ".$c["apellido"]; ?></td>
 											<td><?php echo $c["valor"]; ?></td>
 											<td><?php echo $c["producto"]; ?></td>
+											<td><?php echo $c["fentrega"]; ?></td>
+											<?php if( $c["fentrega"] ) { ?>
+												<td><i class="fa fa-check"></i> Entregado</td>
+											<?php } else { ?>
+												<td>
+													<a href="#modalAnim" class="mb-xs mt-xs mr-xs recanje modal-with-move-anim" 
+														data-idc="<?php echo $c['idCANJE']; ?>" 
+														style="margin-left: 10px;" id="rec<?php echo $c['idCANJE']; ?>">
+															<i class="fa fa-hand-o-right"></i> Registrar entrega
+													</a>
+												</td>
+											<?php } ?>
 										</tr>
 										<?php } ?>
 									</tbody>
 								</table>
 							</div>
 						</section>
+						<?php include( "sections/modals/confirmar-accion.html" ); ?>
+						<input id="idacanje" type="hidden">
 					<!-- end: page -->
 				</section>
 			</div>
@@ -222,14 +235,17 @@
 		<script src="assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
 		<script src="assets/vendor/bootstrap/js/bootstrap.js"></script>
 		<script src="assets/vendor/nanoscroller/nanoscroller.js"></script>
-		<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+		
 		<script src="assets/vendor/magnific-popup/magnific-popup.js"></script>
 		<script src="assets/vendor/jquery-placeholder/jquery.placeholder.js"></script>
 		
 		<!-- Specific Page Vendor -->
 		<script src="assets/vendor/select2/select2.js"></script>
 		<script src="assets/vendor/jquery-datatables/media/js/jquery.dataTables.js"></script>
+		<script src="assets/vendor/jquery-datatables/extras/TableTools/js/dataTables.tableTools.min.js"></script>
 		<script src="assets/vendor/jquery-datatables-bs3/assets/js/datatables.js"></script>
+		<script src="assets/vendor/jquery-validation/jquery.validate.js"></script>
+		<script src="assets/vendor/pnotify/pnotify.custom.js"></script>
 		
 		<!-- Theme Base, Components and Settings -->
 		<script src="assets/javascripts/theme.js"></script>
@@ -239,10 +255,12 @@
 		
 		<!-- Theme Initialization Files -->
 		<script src="assets/javascripts/theme.init.js"></script>
-
+		<script src="js/init.modals.js"></script>
 
 		<!-- Examples -->
-		<!-- <script src="assets/javascripts/tables/examples.datatables.editable.js"></script> -->
-		<script src="js/tabla-canjes.js"></script>
+		<script src="js/fn-ui.js"></script>
+		<script src="js/fn-productos.js"></script>
+		<script src="js/init-tables-default.js"></script>
+		
 	</body>
 </html>

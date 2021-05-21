@@ -12,9 +12,11 @@
 			&& ( $nominacion["estado"] == "pendiente" 		|| 
 				 $nominacion["estado"] == "pendiente_ss" 	|| 
 				 $nominacion["estado"] == "sustento"  		|| 
-				 $nominacion["estado"] == "validada" ) ){
+				 $nominacion["estado"] == "validada" ) 
+			&& !soyNominador( $idu, $nominacion ) && !soyNominado( $idu, $nominacion ) ){
 			$vota = true;
 		}
+
 		return $vota;
 	}
 	/* --------------------------------------------------------- */
@@ -227,10 +229,20 @@
 	function esVisibleEnLista( $dbh, $idu, $nominacion ){
 		// Evalúa si una nominación es visible en el listado de nominaciones
 		$visible = true;
+		$vista_mis_nominaciones = false;
 
-		if( esRol( $dbh, 4, $idu ) ){						//Rol 4: Vicepresidente ( VP ))
+		/*if( esRol( $dbh, 4, $idu ) ){						//Rol 4: Vicepresidente ( VP ))
 			$visible = esVisiblePorVP( $dbh, $idu, $nominacion );
+		}*/
+		if( isset( $_GET["param"] ) ){
+			if( $_GET["param"] == "recibidas" || $_GET["param"] == "hechas" )
+				$vista_mis_nominaciones = true;
 		}
+
+		/*if( esRol( $dbh, 3, $idu ) 
+			&& ( soyNominador( $idu, $nominacion ) || soyNominado( $idu, $nominacion ) ) 
+			&& !$vista_mis_nominaciones && !esRol( $dbh, 1, $idu ) )
+			$visible = false;*/
 
 		return $visible;
 	}
@@ -249,6 +261,11 @@
 	function soyNominado( $idu, $nominacion ){
 		// Evalúa si el usuario actual es el nominado de la nominación
 		return ( $nominacion["idNOMINADO"] == $idu );
+	}
+	/* --------------------------------------------------------- */
+	function soyNominador( $idu, $nominacion ){
+		// Evalúa si el usuario actual es el nominador de la nominación
+		return ( $nominacion["idNOMINADOR"] == $idu );
 	}
 	/* --------------------------------------------------------- */
 	function esNominacionMismoDepartamento( $nominacion ){

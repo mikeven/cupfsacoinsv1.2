@@ -197,6 +197,6 @@
 		<script src="js/fn-ui.js"></script>	
 		<script src="js/fn-productos.js"></script>
 		<script src="js/init-tables-default.js"></script>
-
+		<script>iniciarBotonEliminarProducto();</script>
 	</body>
 </html>

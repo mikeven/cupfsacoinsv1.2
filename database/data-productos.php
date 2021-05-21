@@ -137,7 +137,8 @@
 		$sq = "";
 		if( $idu != "" ) $sq = "and c.idUSUARIO = $idu";
 		$q = "select c.idCANJE, c.idUSUARIO, c.idPRODUCTO, c.valor, 
-		date_format(c.fecha_canje,'%d/%m/%Y') as fregistro, u.nombre, u.apellido, 
+		date_format(c.fecha_canje,'%d/%m/%Y') as fregistro, 
+		date_format(c.fecha_entrega,'%d/%m/%Y') as fentrega, u.nombre, u.apellido, 
 		p.nombre as producto from canje c, usuario u, producto p  
 		where u.idUSUARIO = c.idUSUARIO and c.idPRODUCTO = p.idPRODUCTO $sq 
 		order by c.fecha_canje desc";
@@ -145,6 +146,14 @@
 		$data = mysqli_query( $dbh, $q );
 
 		return obtenerListaRegistros( $data );
+	}
+	/* --------------------------------------------------------- */
+	function actualizarCanje( $dbh, $idc ){
+		// Actualiza la fecha de entrega de un canje - Registro de entrega de canje
+		$q = "update canje set fecha_entrega = NOW() where idCANJE = $idc";
+		
+		$data = mysqli_query( $dbh, $q );
+		return mysqli_affected_rows( $dbh );
 	}
 	/* --------------------------------------------------------- */
 	function registrosAsociadosProducto( $dbh, $idp ){
@@ -281,4 +290,22 @@
 		echo json_encode( $disponible );
 	}
 	/* --------------------------------------------------------- */
+	if( isset( $_POST["canje_entregado"] ) ){
+		// Solicitud para registrar entrega de un canje
+		ini_set( 'display_errors', 1 );
+		include ( "bd.php" );
+		$idcanje 	= $_POST["canje_entregado"];
+
+		$rsp 		= actualizarCanje( $dbh, $idcanje );
+		
+		if( ( $rsp != 0 ) && ( $rsp != "" ) ){
+			$res["exito"] 	= 1;
+			$res["mje"] 	= "Canje actualizado con éxito";
+		} else {
+			$res["exito"] 	= 0;
+			$res["mje"] 	= "Error al actualizar canje";
+		}
+
+		echo json_encode( $res );
+	}
 ?>

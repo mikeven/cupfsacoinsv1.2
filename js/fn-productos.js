@@ -199,6 +199,27 @@ function iniciarBotonEliminarProducto(){
 	});
 }
 /* --------------------------------------------------------- */
+function entregarCanje(){
+	// Invoca al servidor para marcar canje como entregado
+	var idcanje = $("#idacanje").val();
+	
+	$.ajax({
+        type:"POST",
+        url:"database/data-productos.php",
+        data:{ canje_entregado: idcanje },
+        beforeSend: function() { },
+        success: function( response ){
+        	console.log( response );
+			res = jQuery.parseJSON( response );
+			if( res.exito == 1 ){
+    			enviarRespuesta( res, "redireccion", "canjes.php" );
+			}
+			else
+				notificar( "Canjes", res.mje, "error" );
+        }
+    });
+}
+/* --------------------------------------------------------- */
 $("#btn_nvo_prod").on('click', function (e) {
 	// Invoca el envío del formulario de nuevo producto
 	$("#frm_nproducto").submit();
@@ -244,4 +265,19 @@ $("#btn_canje").on('click', function (e) {
     });
 });
 /* --------------------------------------------------------- */
-iniciarBotonEliminarProducto();
+$(".listado_canjes").on( "click", ".recanje", function (e) {
+	//Inicializa la ventana modal para confirmar registrar la entrega de un canje
+	
+	$("#idacanje").val( $(this).attr( "data-idc" ) );
+    
+    iniciarVentanaModal( "btn_entregar_canje", "btn_canc", 
+                         "Entrega de Canje", 
+                         "¿Confirma que desea marcar este canje como entregado?", 
+                         "Confirmar acción" );
+
+    $("#btn_entregar_canje").on('click', function (e) {
+		// Invoca la llamada a marcar canje como entregado
+		entregarCanje();
+	});
+});
+/* --------------------------------------------------------- */
