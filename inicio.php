@@ -13,6 +13,7 @@
     include( "fn/fn-nominaciones.php" );
 
     $idu = $_SESSION["user"]["idUSUARIO"];
+
 ?>
 <!doctype html>
 <html class="fixed">
@@ -110,7 +111,9 @@
 								<div class="panel-body">
 									<?php include( "sections/instrucciones.php" ); ?>
 								</div>
-								
+
+								<?php include( "sections/modals/password_alerta.html" ); ?>
+								<a id="pwdalerta" style="display: none;" href="#modalPasswordAlert" class="mb-xs mt-xs mr-xs eprod modal-with-move-anim"></a>
 							</section>
 							
 						</div>
@@ -154,4 +157,5 @@
 		<!--
 		<script src="assets/javascripts/dashboard/examples.dashboard.js"></script>-->
 	</body>
+	<?php verificarPasswordPorDefectoUsuario( $dbh, $idu ); ?>
 </html>

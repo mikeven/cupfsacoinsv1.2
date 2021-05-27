@@ -133,8 +133,8 @@
 	/* --------------------------------------------------------- */
 	function actualizarPassWordUsuario( $dbh, $usuario ){
 		// Actualiza contraseña de un usuario
-		$q = "update usuario set password = '$usuario[password]', fecha_modificado = NOW() 
-				where idUSUARIO = $usuario[idusuario]";
+		$q = "update usuario set password = '$usuario[password]', fecha_modificado = NOW(), 
+				password_defecto = 0 where idUSUARIO = $usuario[idusuario]";
 		
 		$data = mysqli_query( $dbh, $q );
 		return mysqli_affected_rows( $dbh );

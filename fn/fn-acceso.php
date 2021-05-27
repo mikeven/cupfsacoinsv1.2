@@ -68,6 +68,19 @@
 		return $mostrar;
 	}
 	/* --------------------------------------------------------- */
+	function verificarPasswordPorDefectoUsuario( $dbh, $idu ){
+		// Redirige al usuario a su perfil para actualizar su contraseña en caso que posea una contraseña por defecto
+		$pwd_defecto 		= false;
+		$data_usuario 		= usuarioConPasswordPorDefecto( $dbh, $idu );
+		$pwd_defecto 		= $data_usuario["password_defecto"];
+		
+		if( $pwd_defecto )
+			echo '<script type="text/javascript">', '$("#pwdalerta").click();' , '</script>';
+			//header('Location: miperfil.php?password_defecto');
+	}
+	/* --------------------------------------------------------- */
 
 	$accesos_usess = obtenerEsquemaAccesosUsuario();
+
+
 ?>

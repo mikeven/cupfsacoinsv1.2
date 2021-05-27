@@ -163,6 +163,12 @@
 		}
 	}
 	/* --------------------------------------------------------- */
+	function usuarioConPasswordPorDefecto( $dbh, $idu ){
+		// Devuelve verdadero si el usuario tiene el password asignado por defecto
+		$q = "select password_defecto from usuario where idUSUARIO = $idu";
+		return mysqli_fetch_array( mysqli_query ( $dbh, $q ) );
+	}
+	/* --------------------------------------------------------- */
 	//Inicio de sesión (asinc)
 	if( isset( $_POST["login"] ) ){ 
 		// Invocación desde: js/fn-acceso.js
